@@ -6,12 +6,10 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
     frameworks: ['jasmine'],
     files: [
-      './tests/*.spec.ls',
-      './tests/*.spec.coffee'
+      './apps/**/tests/*.spec.ls'
     ],
     preprocessors: {
-      './tests/*.spec.ls': ['webpack'],
-      './tests/*.spec.coffee': ['webpack']
+      './apps/**/tests/*.spec.ls': ['webpack']
     },
     webpack: webpack,
     webpackMiddleware: {
