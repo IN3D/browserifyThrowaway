@@ -63,12 +63,12 @@ describe 'A Mech', (...) !->
       @mech.weight = 100
       expect(@mech.valid-weight!).toBe true
 
-    it 'should be overweight', !->
-      @mech.weight = 200
+    it 'should be overweight if greather than 100', !->
+      @mech.weight = 101
       expect(@mech.valid-weight!).toBe false
 
-    it 'should be underweight', !->
-      @mech.weight = 10
+    it 'should be underweight if less than 20', !->
+      @mech.weight = 19
       expect(@mech.valid-weight!).toBe false
 
     it 'should be invalid if weight is not a factor of 5', !->
