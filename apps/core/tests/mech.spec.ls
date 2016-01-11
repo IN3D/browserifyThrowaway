@@ -1,32 +1,76 @@
 Mech = require '../models/mech.ls'
 
 
-describe 'A Mech', (...) ->
-  it 'Should be a valid design', (...) ->
-    base =
-      * base: 'Inner Sphere'
-        omni: false
-        weight: 55
-        chassis: \Humanoid
-    mech = new Mech(base)
-    expect(mech.valid-base!).toEqual true
-    expect(mech.valid-omni!).toEqual true
-    expect(mech.valid-weight!).toEqual true
-    expect(mech.valid-chassis!).toEqual true
-    expect(mech.engine).toEqual(jasmine.any(Object))
-    expect(mech.valid!).toEqual true
+describe 'A Mech', (...) !->
+  beforeEach !->
+    @mech = new Mech {
+      weight: 20
+      base: 'Inner Sphere'
+      omni: false
+      chassis: \Humanoid
+    }
 
-  it 'should have a valid weight', (...) ->
-    light-mech = new Mech {weight: 20}
-    assault-mech = new Mech {weight: 100}
-    invalid-mech = new Mech {weight: 200}
-    other-invalid-mech = new Mech {weight: 10}
 
-    expect(light-mech.valid-weight!).toBe true
-    expect(assault-mech.valid-weight!).toBe true
-    expect(invalid-mech.valid-weight!).toBe false
-    expect(other-invalid-mech.valid-weight!).toBe false
+  it 'should be a valid design', !->
+    expect(@mech.valid!).toEqual true
 
-  it 'should have a weight which is a factor of 5', (...) ->
-    invalid-mech = new Mech {weight: 33}
-    expect(invalid-mech.valid-weight!).toBe false
+  it 'should have an engine', !->
+    expect(@mech.engine).toEqual(jasmine.any(Object))
+
+
+  describe "A mech's base", (...) !->
+    it 'can be Inner Sphere', ->
+      expect(@mech.valid-base!).toEqual true
+
+    it 'can be Clan', !->
+      @mech.base = \Clan
+      expect(@mech.valid-base!).toEqual true
+
+    it 'cannot be empty', !->
+      @mech.base = void
+      expect @mech.valid-base! .toEqual false
+
+
+  describe "A mech's omni status", (...) !->
+    it 'can be true', !->
+      @mech.omni = true
+      expect(@mech.valid-omni!).toEqual true
+
+    it 'can be false', !->
+      expect(@mech.valid-omni!).toEqual true
+
+    it 'should be noting else', !->
+      @mech.omni = 'sure'
+      expect(@mech.valid-omni!).toEqual false
+      @mech.omni = 0
+      expect(@mech.valid-omni!).toEqual false
+
+
+  describe "A mech's chassis", (...) !->
+    it 'can be Humanoid', !->
+      expect(@mech.valid-chassis!).toEqual true
+
+    it 'can be Quad', !->
+      @mech.chassis = \Quad
+      expect(@mech.valid-chassis!).toEqual true
+
+
+  describe "A mech's weight", (...) !->
+    it 'should be valid with the lightest weight', !->
+      expect(@mech.valid-weight!).toBe true
+
+    it 'should be valid with the heaviest weight', !->
+      @mech.weight = 100
+      expect(@mech.valid-weight!).toBe true
+
+    it 'should be overweight', !->
+      @mech.weight = 200
+      expect(@mech.valid-weight!).toBe false
+
+    it 'should be underweight', !->
+      @mech.weight = 10
+      expect(@mech.valid-weight!).toBe false
+
+    it 'should be invalid if weight is not a factor of 5', !->
+      @mech.weight = 33
+      expect(@mech.valid-weight!).toBe false
